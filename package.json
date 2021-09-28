@@ -1,7 +1,7 @@
 {
-  "name": "starter-restaurant-reservation",
+  "name": "restaurant-reservation",
   "version": "1.0.0",
-  "description": "Starter project restaurant reservation system",
+  "description": "restaurant reservation",
   "private": true,
   "repository": {
     "type": "git",
