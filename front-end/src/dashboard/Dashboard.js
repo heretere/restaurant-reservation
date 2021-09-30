@@ -42,22 +42,71 @@ function Dashboard() {
   }
 
   return (
-    <main>
+    <main className="container-fluid">
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
-      </div>
       <ErrorAlert error={reservationsError} />
-      {reservations && <ReservationTable reservations={reservations} />}
-      <button type="button" className="btn btn-primary" onClick={pushPrev}>
-        Previous
-      </button>
-      <button type="button" className="btn btn-primary" onClick={pushToday}>
-        Today
-      </button>
-      <button type="button" className="btn btn-primary" onClick={pushNext}>
-        Next
-      </button>
+      <div className={"row"}>
+        <div className="col-sm-6">
+          <div className="d-md-flex mb-3">
+            <h4 className="mb-0">Reservations for {date}</h4>
+          </div>
+          <nav>
+            <ul className="pagination">
+              <li className="page-item">
+                <a className="page-link" href="#" onClick={pushPrev}>
+                  Previous
+                </a>
+              </li>
+              <li className="page-item">
+                <a className="page-link" href="#" onClick={pushToday}>
+                  Today
+                </a>
+              </li>
+              <li className="page-item">
+                <a className="page-link" href="#" onClick={pushNext}>
+                  Next
+                </a>
+              </li>
+            </ul>
+          </nav>
+          {reservations && <ReservationTable reservations={reservations} />}
+        </div>
+        <div className="col-sm-6">
+          <div className="d-md-flex mb-3">
+            <h4 className="mb-0">Tables</h4>
+          </div>
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Placeholder</th>
+                <th scope="col">Placeholder</th>
+                <th scope="col">Placeholder</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Placeholder</td>
+                <td>Placeholder</td>
+                <td>Placeholder</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Placeholder</td>
+                <td>Placeholder</td>
+                <td>Placeholder</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Placeholder</td>
+                <td>Placeholder</td>
+                <td>Placeholder</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </main>
   );
 }

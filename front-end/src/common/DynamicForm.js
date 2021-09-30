@@ -23,8 +23,10 @@ function DynamicForm({
     };
 
     return (
-      <div key={idx} className="form-group">
-        <label htmlFor={input.id}>{input.formattedName}</label>
+      <div key={idx} className="mb-3">
+        <label className="form-label" htmlFor={input.id}>
+          {input.formattedName}
+        </label>
         {input.inputType === "textarea" ? (
           <textarea
             className="form-control"
@@ -55,7 +57,7 @@ function DynamicForm({
 
   return (
     <div className="row">
-      <div className={"col-12"}>
+      <div className="col-sm-12">
         <form
           onSubmit={(e) => {
             e.preventDefault();

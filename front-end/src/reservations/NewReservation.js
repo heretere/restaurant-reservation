@@ -46,6 +46,7 @@ function NewReservation() {
 
   return (
     <React.Fragment>
+      <h1>Add Reservation</h1>
       {error && <ErrorAlert error={error} />}
       <DynamicForm
         inputs={[
