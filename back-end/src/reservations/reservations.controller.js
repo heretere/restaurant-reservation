@@ -52,6 +52,23 @@ const validateReservation = (req, res, next) => {
     });
   }
 
+  const dateNumber = Date.parse(`${reservation_date}T${reservation_time}`);
+  const date = new Date(dateNumber);
+
+  if (dateNumber < Date.now()) {
+    return next({
+      status: 400,
+      message: `Reservation date/time must occur in the future`,
+    });
+  }
+
+  if (date.getDay() === 2) {
+    return next({
+      status: 400,
+      message: `The restaurant is closed on Tuesday`,
+    });
+  }
+
   if (typeof people !== "number" || people < 1) {
     return next({
       status: 400,
