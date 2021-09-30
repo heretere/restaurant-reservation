@@ -54,6 +54,7 @@ const validateReservation = (req, res, next) => {
 
   const dateNumber = Date.parse(`${reservation_date}T${reservation_time}`);
   const date = new Date(dateNumber);
+  const timeNumber = Number(`${date.getHours()}${date.getMinutes()}`);
 
   if (dateNumber < Date.now()) {
     return next({
@@ -66,6 +67,13 @@ const validateReservation = (req, res, next) => {
     return next({
       status: 400,
       message: `The restaurant is closed on Tuesday`,
+    });
+  }
+
+  if (timeNumber < 1030 || timeNumber > 2130) {
+    return next({
+      status: 400,
+      message: `Time need to be between 10:30 and 21:30`,
     });
   }
 

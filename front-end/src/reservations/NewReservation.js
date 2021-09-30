@@ -16,6 +16,7 @@ function NewReservation() {
       `${formData.reservation_date}T${formData.reservation_time}`
     );
     const date = new Date(dateNumber);
+    const timeNumber = Number(`${date.getHours()}${date.getMinutes()}`);
 
     if (dateNumber < Date.now()) {
       errors.push({
@@ -25,6 +26,10 @@ function NewReservation() {
 
     if (date.getDay() === 2) {
       errors.push({ message: "The restaurant is closed on Tuesday" });
+    }
+
+    if (timeNumber < 1030 || timeNumber > 2130) {
+      errors.push({ message: "Please select a time between 10:30 and 21:30" });
     }
 
     if (errors.length) {
