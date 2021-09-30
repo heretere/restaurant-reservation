@@ -1,10 +1,22 @@
 import React from "react";
 import ReservationItem from "./ReservationItem";
 
+const emptyData = {
+  first_name: "None",
+  last_name: "None",
+  mobile_number: "None",
+  people: "None",
+  reservation_time: "None",
+};
+
 const ReservationTable = ({ reservations }) => {
-  const reservationMap = reservations.map((reservation, index) => (
-    <ReservationItem key={index} reservation={reservation} />
-  ));
+  const data = [];
+
+  for (let i = 0; i < 5 || i < reservations.length; i++) {
+    let reservation = reservations[i] || emptyData;
+
+    data.push(<ReservationItem key={i} reservation={reservation} />);
+  }
 
   return (
     <table className="table table-bordered">
@@ -17,7 +29,7 @@ const ReservationTable = ({ reservations }) => {
           <th scope="col">People</th>
         </tr>
       </thead>
-      <tbody>{reservationMap}</tbody>
+      <tbody>{data}</tbody>
     </table>
   );
 };

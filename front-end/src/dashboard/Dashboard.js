@@ -46,9 +46,12 @@ function Dashboard() {
       <h1>Dashboard</h1>
       <ErrorAlert error={reservationsError} />
       <div className={"row"}>
-        <div className="col-sm-6">
+        <div className="col-lg-6 col-md-12">
           <div className="d-md-flex mb-3">
             <h4 className="mb-0">Reservations for {date}</h4>
+          </div>
+          <div className={"table-responsive"}>
+            {reservations && <ReservationTable reservations={reservations} />}
           </div>
           <nav>
             <ul className="pagination">
@@ -69,9 +72,8 @@ function Dashboard() {
               </li>
             </ul>
           </nav>
-          {reservations && <ReservationTable reservations={reservations} />}
         </div>
-        <div className="col-sm-6">
+        <div className="col-lg-6 col-md-12 table-responsive">
           <div className="d-md-flex mb-3">
             <h4 className="mb-0">Tables</h4>
           </div>
