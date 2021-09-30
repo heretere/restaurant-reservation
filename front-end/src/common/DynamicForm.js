@@ -66,7 +66,11 @@ function DynamicForm({
           {inputList}
           <button
             className="btn btn-secondary mr-2"
-            onClick={() => history.push(cancelUrl)}
+            onClick={
+              typeof cancelUrl === "string"
+                ? () => history.push(cancelUrl)
+                : cancelUrl
+            }
           >
             {cancelName}
           </button>

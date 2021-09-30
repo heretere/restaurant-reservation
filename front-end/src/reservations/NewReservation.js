@@ -68,7 +68,7 @@ function NewReservation() {
         },
       ]}
       submit={{ action: addReservation }}
-      cancel={{ url: "/" }}
+      cancel={{ url: () => history.goBack() }}
     />
   );
 }
