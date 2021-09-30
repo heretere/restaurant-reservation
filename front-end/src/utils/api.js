@@ -68,6 +68,12 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+/**
+ *
+ * @param reservation reservation to add
+ * @param signal abort signal
+ * @returns {Promise<Error|reservation>} the created reservation or an error
+ */
 export async function postReservation(reservation, signal) {
   return fetchJson(
     `${API_BASE_URL}/reservations`,
