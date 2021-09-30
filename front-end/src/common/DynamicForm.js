@@ -59,8 +59,7 @@ function DynamicForm({
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            submitAction(formData);
-            setFormData({ ...initialForm });
+            submitAction(formData, () => setFormData({ ...initialForm }));
           }}
         >
           {inputList}
