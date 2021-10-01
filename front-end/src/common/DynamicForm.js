@@ -23,8 +23,11 @@ function DynamicForm({
     };
 
     return (
-      <div key={idx} className="mb-3">
-        <label className="form-label" htmlFor={input.id}>
+      <div
+        key={idx}
+        className={(input.className || "col-12") + " d-flex flex-column"}
+      >
+        <label className="form-label mt-2" htmlFor={input.id}>
           {input.formattedName}
         </label>
         {input.inputType === "textarea" ? (
@@ -56,17 +59,18 @@ function DynamicForm({
   });
 
   return (
-    <div className="row">
-      <div className="col-sm-12">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            submitAction(formData, () => setFormData({ ...initialForm }));
-          }}
-        >
-          {inputList}
+    <form
+      className="row"
+      onSubmit={(e) => {
+        e.preventDefault();
+        submitAction(formData, () => setFormData({ ...initialForm }));
+      }}
+    >
+      <div className="row">{inputList}</div>
+      <div className="row col-12 mt-4">
+        <div className="pr-2 col-6">
           <button
-            className="btn btn-secondary mr-2"
+            className="btn btn-secondary col-12"
             onClick={
               typeof cancelUrl === "string"
                 ? () => history.push(cancelUrl)
@@ -75,12 +79,15 @@ function DynamicForm({
           >
             {cancelName}
           </button>
-          <button type="submit" className="btn btn-primary">
+        </div>
+
+        <div className="pl-2 col-6">
+          <button type="submit" className="btn btn-primary col-12">
             {submitName}
           </button>
-        </form>
+        </div>
       </div>
-    </div>
+    </form>
   );
 }
 

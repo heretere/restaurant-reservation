@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import DynamicForm from "../common/DynamicForm";
 import { postReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { today } from "../utils/date-time";
 
 function NewReservation() {
   const history = useHistory();
@@ -15,8 +16,18 @@ function NewReservation() {
     const dateNumber = Date.parse(
       `${formData.reservation_date}T${formData.reservation_time}`
     );
-    const date = new Date(dateNumber);
-    const timeNumber = Number(`${date.getHours()}${date.getMinutes()}`);
+    const currentDate = new Date(dateNumber);
+    const timeNumber = Number(
+      `${
+        currentDate.getHours() < 10
+          ? "0" + currentDate.getHours()
+          : currentDate.getHours()
+      }${
+        currentDate.getMinutes() < 10
+          ? "0" + currentDate.getMinutes()
+          : currentDate.getMinutes()
+      }`
+    );
 
     if (dateNumber < Date.now()) {
       errors.push({
@@ -24,7 +35,7 @@ function NewReservation() {
       });
     }
 
-    if (date.getDay() === 2) {
+    if (currentDate.getDay() === 2) {
       errors.push({ message: "The restaurant is closed on Tuesday" });
     }
 
@@ -44,6 +55,8 @@ function NewReservation() {
       .catch(setError);
   };
 
+  const date = new Date();
+
   return (
     <React.Fragment>
       <h1>Add Reservation</h1>
@@ -55,24 +68,18 @@ function NewReservation() {
             id: "first_name",
             name: "first_name",
             formattedName: "First Name",
-            placeholder: "",
+            placeholder: "First Name",
             defaultValue: "",
+            className: "col-6",
           },
           {
             inputType: "text",
             id: "last_name",
             name: "last_name",
             formattedName: "Last Name",
-            placeholder: "",
+            placeholder: "Last Name",
             defaultValue: "",
-          },
-          {
-            inputType: "text",
-            id: "mobile_number",
-            name: "mobile_number",
-            formattedName: "Mobile Number",
-            placeholder: "",
-            defaultValue: "",
+            className: "col-6",
           },
           {
             inputType: "date",
@@ -80,7 +87,8 @@ function NewReservation() {
             name: "reservation_date",
             formattedName: "Date of reservation",
             placeholder: "",
-            defaultValue: "",
+            defaultValue: today(),
+            className: "col-6",
           },
           {
             inputType: "time",
@@ -88,7 +96,22 @@ function NewReservation() {
             name: "reservation_time",
             formattedName: "Time of reservation",
             placeholder: "",
+            defaultValue:
+              (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) +
+              ":" +
+              (date.getMinutes() < 10
+                ? "0" + date.getMinutes()
+                : date.getMinutes()),
+            className: "col-6",
+          },
+          {
+            inputType: "text",
+            id: "mobile_number",
+            name: "mobile_number",
+            formattedName: "Mobile Number",
+            placeholder: "(555) 555-5555",
             defaultValue: "",
+            className: "col-6",
           },
           {
             inputType: "number",
@@ -98,6 +121,7 @@ function NewReservation() {
             placeholder: "",
             defaultValue: 1,
             min: 1,
+            className: "col-6",
           },
         ]}
         submit={{ action: addReservation }}

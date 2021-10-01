@@ -16,7 +16,7 @@ function Layout() {
     <div className="container-fluid">
       <div className="row h-100">
         <Menu />
-        <div className="col-md-10 col-sm-12">
+        <div className="col-lg-10 col-sm-12">
           <Routes />
         </div>
       </div>

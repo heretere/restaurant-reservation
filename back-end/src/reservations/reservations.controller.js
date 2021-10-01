@@ -43,7 +43,6 @@ const validateReservation = (req, res, next) => {
 
   if (
     !reservation_time ||
-    !reservation_time.length ||
     !/^([0-1][0-9]|2[0-3]):([0-5][0-9])$/.test(reservation_time)
   ) {
     return next({
@@ -54,8 +53,11 @@ const validateReservation = (req, res, next) => {
 
   const dateNumber = Date.parse(`${reservation_date}T${reservation_time}`);
   const date = new Date(dateNumber);
-  const timeNumber = Number(`${date.getHours()}${date.getMinutes()}`);
-
+  const timeNumber = Number(
+    `${date.getHours() < 10 ? "0" + date.getHours() : date.getHours()}${
+      date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
+    }`
+  );
   if (dateNumber < Date.now()) {
     return next({
       status: 400,
