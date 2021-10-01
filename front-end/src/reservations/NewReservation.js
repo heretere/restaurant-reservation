@@ -101,7 +101,7 @@ function NewReservation() {
           },
         ]}
         submit={{ action: addReservation }}
-        cancel={{ url: () => history.goBack() }}
+        cancel={{ url: history.goBack }}
       />
     </React.Fragment>
   );

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import ReservationTable from "./ReservationTable";
 import { next, previous, today } from "../utils/date-time";
 import { useHistory } from "react-router-dom";
 import useQuery from "../utils/useQuery";
+import DynamicTable from "../common/DynamicTable";
 
 /**
  * Defines the dashboard page.
@@ -51,7 +51,16 @@ function Dashboard() {
             <h4 className="mb-0">Reservations for {date}</h4>
           </div>
           <div className={"table-responsive"}>
-            {reservations && <ReservationTable reservations={reservations} />}
+            <DynamicTable
+              headers={{
+                first_name: "First Name",
+                last_name: "Last Name",
+                mobile_number: "Mobile Number",
+                reservation_time: "Time",
+                people: "People",
+              }}
+              data={reservations}
+            />
           </div>
           <nav>
             <ul className="pagination">
