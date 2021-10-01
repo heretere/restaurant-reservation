@@ -56,19 +56,19 @@ function Dashboard() {
           <nav>
             <ul className="pagination">
               <li className="page-item">
-                <a className="page-link" href="#" onClick={pushPrev}>
+                <button className="page-link" onClick={pushPrev}>
                   Previous
-                </a>
+                </button>
               </li>
               <li className="page-item">
-                <a className="page-link" href="#" onClick={pushToday}>
+                <button className="page-link" onClick={pushToday}>
                   Today
-                </a>
+                </button>
               </li>
               <li className="page-item">
-                <a className="page-link" href="#" onClick={pushNext}>
+                <button className="page-link" onClick={pushNext}>
                   Next
-                </a>
+                </button>
               </li>
             </ul>
           </nav>
