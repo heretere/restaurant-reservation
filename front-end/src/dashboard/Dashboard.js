@@ -42,10 +42,10 @@ function Dashboard() {
   }
 
   return (
-    <main className="container-fluid">
+    <main>
       <h1>Dashboard</h1>
       <ErrorAlert error={reservationsError} />
-      <div className={"row"}>
+      <div className="row">
         <div className="col-lg-6 col-md-12">
           <div className="d-md-flex mb-3">
             <h4 className="mb-0">Reservations for {date}</h4>
