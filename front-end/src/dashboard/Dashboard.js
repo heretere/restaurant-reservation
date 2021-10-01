@@ -50,18 +50,16 @@ function Dashboard() {
           <div className="d-md-flex mb-3">
             <h4 className="mb-0">Reservations for {date}</h4>
           </div>
-          <div className={"table-responsive"}>
-            <DynamicTable
-              headers={{
-                first_name: "First Name",
-                last_name: "Last Name",
-                mobile_number: "Mobile Number",
-                reservation_time: "Time",
-                people: "People",
-              }}
-              data={reservations}
-            />
-          </div>
+          <DynamicTable
+            headers={{
+              first_name: "First Name",
+              last_name: "Last Name",
+              mobile_number: "Mobile Number",
+              reservation_time: "Time",
+              people: "People",
+            }}
+            data={reservations}
+          />
           <nav>
             <ul className="pagination">
               <li className="page-item">

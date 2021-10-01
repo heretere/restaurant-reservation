@@ -9,14 +9,14 @@ import { Link } from "react-router-dom";
 
 function Menu() {
   return (
-    <div className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark col-lg-2 col-md-12">
+    <div className="d-flex flex-lg-column flex-md-row5 flex-shrink-0 p-3 text-white bg-dark col-lg-2 col-md-12">
       <Link
         className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
         to="/"
       >
         <span className="fs-4">Periodic Tables</span>
       </Link>
-      <ul className="nav nav-pills flex-column mb-auto">
+      <ul className="nav nav-pills flex-lg-column flex-md-row mb-auto">
         <li className="nav-item">
           <Link className="nav-link text-white" to="/dashboard">
             <span className="oi oi-dashboard" />

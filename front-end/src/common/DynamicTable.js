@@ -30,12 +30,14 @@ function DynamicTable({
   }
 
   return (
-    <table className="table table-bordered table-dynamic">
-      <thead>
-        <tr>{headerMap}</tr>
-      </thead>
-      <tbody>{rows}</tbody>
-    </table>
+    <div className="col-auto table-responsive text-center">
+      <table className="table table-bordered table-dynamic">
+        <thead>
+          <tr>{headerMap}</tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    </div>
   );
 }
 
