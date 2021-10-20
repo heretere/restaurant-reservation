@@ -17,7 +17,7 @@ function ErrorAlert({ error }) {
           {Array.isArray(error) ? (
             error.map((curr, index) => <li key={index}>{curr.message}</li>)
           ) : (
-            <li>error.message</li>
+            <li>{error.message}</li>
           )}
         </ul>
       </div>
