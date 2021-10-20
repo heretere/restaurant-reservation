@@ -89,6 +89,23 @@ const validateReservation = (req, res, next) => {
   return next();
 };
 
+const reservationExists = (req, res, next) => {
+  service
+    .read(req.params.reservationId)
+    .then((reservation) => {
+      if (!reservation) {
+        return next({
+          status: 404,
+          message: `${req.params.reservationId} does not exist.`,
+        });
+      }
+
+      res.locals.reservation = reservation;
+      return next();
+    })
+    .catch(next);
+};
+
 /**
  * List handler for reservation resources
  */
@@ -111,7 +128,12 @@ const post = (req, res, next) => {
     .catch(next);
 };
 
+const read = (req, res) => {
+  res.json({ data: res.locals.reservation });
+};
+
 module.exports = {
   list: list,
   post: [validateReservation, post],
+  read: [reservationExists, read],
 };

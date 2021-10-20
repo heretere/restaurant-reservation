@@ -19,10 +19,13 @@ const list = (reservation_date) => {
   return query;
 };
 
-const post = (reservation) =>
+const create = (reservation) =>
   knex(TABLE_NAME)
     .insert(reservation)
     .returning("*")
     .then((columns) => columns[0]);
 
-module.exports = { list, post };
+const read = (reservation_id) =>
+  knex(TABLE_NAME).where({ reservation_id }).first();
+
+module.exports = { list, post: create, read };
