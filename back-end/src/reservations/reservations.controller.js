@@ -2,7 +2,7 @@ const service = require("./reservations.service");
 
 // Middleware validation
 
-const validStatuses = ["booked", "seated", "finished"];
+const validStatuses = ["booked", "seated", "finished", "cancelled"];
 
 const validateReservation = (req, res, next) => {
   const {
@@ -96,6 +96,16 @@ const validateReservation = (req, res, next) => {
     });
   }
 
+  res.locals.reservation = {
+    first_name,
+    last_name,
+    mobile_number,
+    reservation_date,
+    reservation_time,
+    people,
+    status,
+  };
+
   return next();
 };
 
@@ -116,8 +126,17 @@ const reservationExists = (req, res, next) => {
     .catch(next);
 };
 
-const validateStatus = (req, res, next) => {
+const validateStatus = (onlyBooked) => (req, res, next) => {
   const { data: { status } = {} } = req.body;
+
+  if (onlyBooked) {
+    if (res.locals.reservation.status !== "booked") {
+      return next({
+        status: 400,
+        message: `Can only update booked reservations`,
+      });
+    }
+  }
 
   if (res.locals.reservation.status === "finished") {
     return next({
@@ -158,17 +177,26 @@ const post = (req, res, next) => {
     .catch(next);
 };
 
+/**
+ * Read specific reservation
+ */
 const read = (req, res) => {
   res.json({ data: res.locals.reservation });
 };
 
+const update = (req, res, next) => {
+  service
+    .update(req.params.reservationId, res.locals.reservation)
+    .then((data) => res.json({ data }))
+    .catch(next);
+};
+
+/**
+ * Update the status of a reservation
+ */
 const updateStatus = (req, res, next) => {
   service
     .updateReservationStatus(req.params.reservationId, req.body.data.status)
-    .then((data) => {
-      console.log(data);
-      return data;
-    })
     .then((data) => res.json({ data }))
     .catch(next);
 };
@@ -177,5 +205,11 @@ module.exports = {
   list: list,
   post: [validateReservation, post],
   read: [reservationExists, read],
-  updateStatus: [reservationExists, validateStatus, updateStatus],
+  updateStatus: [reservationExists, validateStatus(false), updateStatus],
+  update: [
+    reservationExists,
+    validateReservation,
+    validateStatus(true),
+    update,
+  ],
 };
