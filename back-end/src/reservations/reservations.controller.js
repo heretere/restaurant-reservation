@@ -140,10 +140,10 @@ const validateStatus = (req, res, next) => {
  * List handler for reservation resources
  */
 const list = (req, res, next) => {
-  const { date } = req.query;
+  const { date, mobile_number } = req.query;
 
   service
-    .list(date)
+    .list(date, mobile_number)
     .then((data) => res.json({ data }))
     .catch(next);
 };

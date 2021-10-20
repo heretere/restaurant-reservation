@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react";
-import {
-  deleteTableReservation,
-  listReservations,
-  listTables,
-} from "../utils/api";
+import React, {useEffect, useState} from "react";
+import {deleteTableReservation, listReservations, listTables,} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { next, previous, today } from "../utils/date-time";
-import { Link, useHistory } from "react-router-dom";
+import {next, previous, today} from "../utils/date-time";
+import {useHistory} from "react-router-dom";
 import useQuery from "../utils/useQuery";
 import DynamicTable from "../common/DynamicTable";
+import ReservationTable from "../common/ReservationTable";
 
 /**
  * Defines the dashboard page.
@@ -70,41 +67,7 @@ function Dashboard() {
           <div className="d-md-flex mb-3">
             <h4 className="mb-0">Reservations for {date}</h4>
           </div>
-          <DynamicTable
-            headers={{
-              seat: "",
-              first_name: "First Name",
-              last_name: "Last Name",
-              mobile_number: "Mobile Number",
-              reservation_time: "Time",
-              people: "People",
-              status: "Status",
-            }}
-            mappers={{
-              seat: (key, { reservation_id, status }) => {
-                return (
-                  <td key={key}>
-                    {status === "booked" && (
-                      <Link
-                        className="btn btn-primary"
-                        to={`/reservations/${reservation_id}/seat`}
-                      >
-                        Seat
-                      </Link>
-                    )}
-                  </td>
-                );
-              },
-              status: (key, { reservation_id, status }) => {
-                return (
-                  <td key={key} data-reservation-id-status={reservation_id}>
-                    {status}
-                  </td>
-                );
-              },
-            }}
-            data={reservations}
-          />
+          <ReservationTable reservations={reservations} />
           <nav>
             <ul className="pagination">
               <li className="page-item">

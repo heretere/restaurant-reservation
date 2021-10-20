@@ -5,6 +5,7 @@ import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import NewTable from "../tables/NewTable";
 import Reservations from "../reservations/Reservations";
+import Search from "../search/Search";
 
 /**
  * Defines all the routes for the application.
@@ -24,6 +25,9 @@ function Routes() {
       </Route>
       <Route path="/tables/new">
         <NewTable />
+      </Route>
+      <Route path="/search">
+        <Search />
       </Route>
       <Route path="/dashboard">
         <Dashboard />
