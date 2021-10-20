@@ -32,6 +32,7 @@ const updateReservation = (table_id, reservation_id) => {
   return knex(TABLE_NAME)
     .where({ table_id })
     .update({ reservation_id })
+    .returning("*")
     .then((rows) => rows[0]);
 };
 

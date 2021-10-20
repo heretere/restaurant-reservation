@@ -75,6 +75,13 @@ const validateTableSeating = (req, res, next) => {
     });
   }
 
+  if (reservation.status !== "booked") {
+    return next({
+      status: 400,
+      message: `${reservation.reservation_id} has already been seated.`,
+    });
+  }
+
   return next();
 };
 
@@ -126,17 +133,31 @@ const assignReservation = (req, res, next) => {
 
   service
     .updateReservation(table_id, reservation_id)
+    .then(async (data) => {
+      await reservationService.updateReservationStatus(
+        reservation_id,
+        "seated"
+      );
+      return data;
+    })
     .then((data) => res.json({ data }))
     .catch(next);
 };
 
 const unAssignReservation = (req, res, next) => {
   const {
-    table: { table_id },
+    table: { table_id, reservation_id },
   } = res.locals;
 
   service
     .updateReservation(table_id, null)
+    .then(async (data) => {
+      await reservationService.updateReservationStatus(
+        reservation_id,
+        "finished"
+      );
+      return data;
+    })
     .then((data) => res.json({ data }))
     .catch(next);
 };

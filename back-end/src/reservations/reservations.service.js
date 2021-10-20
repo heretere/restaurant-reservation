@@ -5,7 +5,10 @@ const TABLE_NAME = "reservations";
  * Sends query to DB to get back list of reservations
  */
 const list = (reservation_date) => {
-  let query = knex(TABLE_NAME).select("*").orderBy("reservation_time", "ASC");
+  let query = knex(TABLE_NAME)
+    .select("*")
+    .whereNot("status", "finished")
+    .orderBy("reservation_time", "ASC");
 
   if (
     reservation_date &&
@@ -25,7 +28,15 @@ const create = (reservation) =>
     .returning("*")
     .then((columns) => columns[0]);
 
+const updateReservationStatus = (reservation_id, status) => {
+  return knex(TABLE_NAME)
+    .where({ reservation_id })
+    .update({ status })
+    .returning("*")
+    .then((rows) => rows[0]);
+};
+
 const read = (reservation_id) =>
   knex(TABLE_NAME).where({ reservation_id }).first();
 
-module.exports = { list, post: create, read };
+module.exports = { list, post: create, read, updateReservationStatus };
