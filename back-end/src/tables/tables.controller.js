@@ -4,7 +4,7 @@ const reservationService = require("../reservations/reservations.service");
 // Middleware validation
 
 const validateTable = (req, res, next) => {
-  const { data: { table_name, capacity } = {} } = req.body;
+  const { data: { table_name, capacity, reservation_id } = {} } = req.body;
 
   if (!table_name || table_name.length < 2) {
     return next({ status: 400, message: `Invalid table_name: ${table_name}` });
@@ -14,7 +14,7 @@ const validateTable = (req, res, next) => {
     return next({ status: 400, message: `Invalid capacity: ${capacity}` });
   }
 
-  res.locals.table = { table_name, capacity };
+  res.locals.table = { table_name, capacity, reservation_id };
 
   return next();
 };
@@ -58,7 +58,7 @@ const validateReservation = (req, res, next) => {
     .catch(next);
 };
 
-const validateSeating = (req, res, next) => {
+const validateTableSeating = (req, res, next) => {
   const { table, reservation } = res.locals;
 
   if (table.reservation_id) {
@@ -72,6 +72,19 @@ const validateSeating = (req, res, next) => {
     return next({
       status: 400,
       message: `${table.table_id} can't hold that many people. (capacity: ${table.capacity})`,
+    });
+  }
+
+  return next();
+};
+
+const validateTableOccupied = (req, res, next) => {
+  const { table } = res.locals;
+
+  if (!table.reservation_id) {
+    return next({
+      status: 400,
+      message: `${table.table_id} is not occupied.`,
     });
   }
 
@@ -117,6 +130,17 @@ const assignReservation = (req, res, next) => {
     .catch(next);
 };
 
+const unAssignReservation = (req, res, next) => {
+  const {
+    table: { table_id },
+  } = res.locals;
+
+  service
+    .updateReservation(table_id, null)
+    .then((data) => res.json({ data }))
+    .catch(next);
+};
+
 module.exports = {
   list: list,
   post: [validateTable, post],
@@ -124,7 +148,8 @@ module.exports = {
   assignReservation: [
     tableExists,
     validateReservation,
-    validateSeating,
+    validateTableSeating,
     assignReservation,
   ],
+  deleteReservation: [tableExists, validateTableOccupied, unAssignReservation],
 };

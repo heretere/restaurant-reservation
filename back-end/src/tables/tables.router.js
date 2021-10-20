@@ -11,6 +11,6 @@ router.route("/").get(controller.list).post(controller.post);
 
 router.route("/:tableId([0-9]+)").get(controller.read);
 
-router.route("/:tableId([0-9]+)/seat").put(controller.assignReservation);
+router.route("/:tableId([0-9]+)/seat").put(controller.assignReservation).delete(controller.deleteReservation);
 
 module.exports = router;
