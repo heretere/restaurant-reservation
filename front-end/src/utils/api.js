@@ -69,6 +69,15 @@ export async function listReservations(params, signal) {
 }
 
 /**
+ * Retrieve reservation from api
+ */
+export async function getReservation(reservationId, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservationId}`);
+
+  return fetchJson(url, { headers, signal }, []);
+}
+
+/**
  *
  * @param reservation reservation to add
  * @param signal abort signal
@@ -81,6 +90,48 @@ export async function postReservation(reservation, signal) {
       method: "POST",
       headers,
       body: JSON.stringify({ data: reservation }),
+      signal,
+    },
+    {}
+  );
+}
+
+/**
+ * List available tables
+ */
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return fetchJson(url, { headers, signal }, []);
+}
+
+/**
+ * Create new table
+ */
+export async function postTable(table, signal) {
+  return fetchJson(
+    `${API_BASE_URL}/tables`,
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ data: table }),
+      signal,
+    },
+    {}
+  );
+}
+
+/**
+ * Seat reservation in database
+ */
+export async function putReservation({ table_id }, { reservation_id }, signal) {
+  return fetchJson(
+    `${API_BASE_URL}/tables/${table_id}/seat`,
+    {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({
+        data: { reservation_id },
+      }),
       signal,
     },
     {}

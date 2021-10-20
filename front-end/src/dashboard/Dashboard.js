@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { next, previous, today } from "../utils/date-time";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import useQuery from "../utils/useQuery";
 import DynamicTable from "../common/DynamicTable";
 
@@ -16,7 +16,8 @@ function Dashboard() {
   const history = useHistory();
 
   const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(loadDashboard, [date]);
 
@@ -34,17 +35,18 @@ function Dashboard() {
 
   function loadDashboard() {
     const abortController = new AbortController();
-    setReservationsError(null);
+    setError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
-      .catch(setReservationsError);
+      .catch(setError);
+    listTables(abortController.signal).then(setTables).catch(setError);
     return () => abortController.abort();
   }
 
   return (
     <main>
       <h1>Dashboard</h1>
-      <ErrorAlert error={reservationsError} />
+      <ErrorAlert error={error} />
       <div className="row d-flex justify-content-center">
         <div className="col-lg-6 col-md-12">
           <div className="d-md-flex mb-3">
@@ -52,11 +54,26 @@ function Dashboard() {
           </div>
           <DynamicTable
             headers={{
+              seat: "",
               first_name: "First Name",
               last_name: "Last Name",
               mobile_number: "Mobile Number",
               reservation_time: "Time",
               people: "People",
+            }}
+            mappers={{
+              seat: (key, { reservation_id }) => {
+                return (
+                  <td key={key}>
+                    <Link
+                      className="btn btn-primary"
+                      to={`/reservations/${reservation_id}/seat`}
+                    >
+                      Seat
+                    </Link>
+                  </td>
+                );
+              },
             }}
             data={reservations}
           />
@@ -80,40 +97,25 @@ function Dashboard() {
             </ul>
           </nav>
         </div>
-        <div className="col-lg-6 col-md-12 table-responsive">
+        <div className="col-lg-6 col-md-12">
           <div className="d-md-flex mb-3">
             <h4 className="mb-0">Tables</h4>
           </div>
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Placeholder</th>
-                <th scope="col">Placeholder</th>
-                <th scope="col">Placeholder</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Placeholder</td>
-                <td>Placeholder</td>
-                <td>Placeholder</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Placeholder</td>
-                <td>Placeholder</td>
-                <td>Placeholder</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Placeholder</td>
-                <td>Placeholder</td>
-                <td>Placeholder</td>
-              </tr>
-            </tbody>
-          </table>
+          <DynamicTable
+            headers={{
+              table_name: "Table Name",
+              capacity: "Capacity",
+              occupied: "Occupied",
+            }}
+            mappers={{
+              occupied: (key, { reservation_id, table_id }) => (
+                <td key={key} data-table-id-status={table_id}>
+                  {reservation_id ? "Occupied" : "Free"}
+                </td>
+              ),
+            }}
+            data={tables}
+          />
         </div>
       </div>
     </main>

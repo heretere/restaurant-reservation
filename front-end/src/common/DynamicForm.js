@@ -22,15 +22,11 @@ function DynamicForm({
       }));
     };
 
-    return (
-      <div
-        key={idx}
-        className={(input.className || "col-12") + " d-flex flex-column"}
-      >
-        <label className="form-label mt-2" htmlFor={input.id}>
-          {input.formattedName}
-        </label>
-        {input.inputType === "textarea" ? (
+    let inputField;
+
+    switch (input.inputType) {
+      case "textarea":
+        inputField = (
           <textarea
             className="form-control"
             id={input.id}
@@ -41,7 +37,25 @@ function DynamicForm({
             rows={4}
             required={true}
           />
-        ) : (
+        );
+        break;
+      case "select":
+        inputField = (
+          <select
+            className="form-control"
+            id={input.id}
+            name={input.name}
+            placeholder={input.placeholder}
+            value={formData[input.name]}
+            onChange={updateFormData}
+            required={true}
+          >
+            {input.options}
+          </select>
+        );
+        break;
+      default:
+        inputField = (
           <input
             type={input.inputType}
             className="form-control"
@@ -53,7 +67,19 @@ function DynamicForm({
             required={true}
             min={input.min}
           />
-        )}
+        );
+    }
+
+    return (
+      <div
+        key={idx}
+        className={(input.className || "col-12") + " d-flex flex-column"}
+      >
+        <label className="form-label mt-2" htmlFor={input.id}>
+          {input.formattedName}
+        </label>
+
+        {inputField}
       </div>
     );
   });
