@@ -137,3 +137,18 @@ export async function putReservation({ table_id }, { reservation_id }, signal) {
     {}
   );
 }
+
+/**
+ * Create new table
+ */
+export async function deleteTableReservation({ table_id }, signal) {
+  return fetchJson(
+    `${API_BASE_URL}/tables/${table_id}/seat`,
+    {
+      method: "DELETE",
+      headers,
+      signal,
+    },
+    {}
+  );
+}
