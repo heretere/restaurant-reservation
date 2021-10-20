@@ -1,18 +1,35 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { postReservation } from "../utils/api";
+import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import { getReservation, updateReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { today } from "../utils/date-time";
 import ReservationForm from "./ReservationForm";
+import { asDateString, formatAsTime } from "../utils/date-time";
 
-function NewReservation() {
+function EditReservation() {
   const history = useHistory();
+  const { reservationId } = useParams();
   const [error, setError] = useState();
+  const [reservation, setReservation] = useState();
 
-  const addReservation = (formData, resetForm) => {
-    formData = { ...formData, people: Number(formData.people) };
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    getReservation(reservationId, abortController.signal)
+      .then(setReservation)
+      .catch(setError);
+
+    return () => abortController.abort();
+  }, [reservationId]);
+
+  const updateReservationAction = (formData, resetForm) => {
+    formData = { ...reservation, ...formData, people: Number(formData.people) };
 
     const errors = [];
+
+    if (formData.status !== "booked") {
+      errors.push("Can only update reservations with a booked status.");
+    }
+
     const dateNumber = Date.parse(
       `${formData.reservation_date}T${formData.reservation_time}`
     );
@@ -48,37 +65,31 @@ function NewReservation() {
       return;
     }
 
-    postReservation(formData)
+    updateReservation(formData)
       .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
       .then(() => resetForm())
       .then(() => setError())
       .catch(setError);
   };
 
-  const date = new Date();
-
   return (
     <React.Fragment>
       <h1>Add Reservation</h1>
       {error && <ErrorAlert error={error} />}
-      <ReservationForm
-        submitAction={addReservation}
-        defaultValues={{
-          first_name: "",
-          last_name: "",
-          reservation_date: today(),
-          reservation_time:
-            (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) +
-            ":" +
-            (date.getMinutes() < 10
-              ? "0" + date.getMinutes()
-              : date.getMinutes()),
-          mobile_number: "",
-          people: 1,
-        }}
-      />
+      {reservation && (
+        <ReservationForm
+          submitAction={updateReservationAction}
+          defaultValues={{
+            ...reservation,
+            reservation_date: asDateString(
+              new Date(reservation.reservation_date)
+            ),
+            reservation_time: formatAsTime(reservation.reservation_time),
+          }}
+        />
+      )}
     </React.Fragment>
   );
 }
 
-export default NewReservation;
+export default EditReservation;

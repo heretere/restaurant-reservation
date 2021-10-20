@@ -7,7 +7,7 @@ export default function Search() {
   const [mobileNumber, setMobileNumber] = useState();
 
   const runSearch = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
 
     if (!mobileNumber) return;
 
@@ -47,7 +47,10 @@ export default function Search() {
         <div className="row d-flex justify-content-center mt-5">
           <div className="col-12">
             {reservations.length ? (
-              <ReservationTable reservations={reservations} />
+              <ReservationTable
+                reservations={reservations}
+                reloadReservations={runSearch}
+              />
             ) : (
               <h3>No reservations found</h3>
             )}

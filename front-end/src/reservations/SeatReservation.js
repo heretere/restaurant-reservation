@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import DynamicForm from "../common/DynamicForm";
-import { getReservation, listTables, putReservation } from "../utils/api";
+import {
+  getReservation,
+  listTables,
+  seatReservationStatus,
+} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
@@ -60,7 +64,7 @@ function SeatReservation() {
       return;
     }
 
-    putReservation(table, reservation)
+    seatReservationStatus(table, reservation)
       .then(() => history.push("/dashboard"))
       .then(() => resetForm())
       .then(() => setError())

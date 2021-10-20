@@ -120,10 +120,28 @@ export async function postTable(table, signal) {
   );
 }
 
+export async function updateReservation(reservation) {
+  return fetchJson(
+    `${API_BASE_URL}/reservations/${reservation.reservation_id}`,
+    {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({
+        data: reservation,
+      }),
+    },
+    {}
+  );
+}
+
 /**
  * Seat reservation in database
  */
-export async function putReservation({ table_id }, { reservation_id }, signal) {
+export async function seatReservationStatus(
+  { table_id },
+  { reservation_id },
+  signal
+) {
   return fetchJson(
     `${API_BASE_URL}/tables/${table_id}/seat`,
     {
@@ -131,6 +149,21 @@ export async function putReservation({ table_id }, { reservation_id }, signal) {
       headers,
       body: JSON.stringify({
         data: { reservation_id },
+      }),
+      signal,
+    },
+    {}
+  );
+}
+
+export async function cancelReservation(reservation_id, signal) {
+  return fetchJson(
+    `${API_BASE_URL}/reservations/${reservation_id}/status`,
+    {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({
+        data: { status: "cancelled" },
       }),
       signal,
     },

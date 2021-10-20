@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import NewReservation from "./NewReservation";
 import NotFound from "../layout/NotFound";
 import SeatReservation from "./SeatReservation";
+import EditReservation from "./EditReservation";
 
 export default function Reservations() {
   return (
@@ -15,6 +16,9 @@ export default function Reservations() {
       </Route>
       <Route path="/reservations/:reservationId/seat">
         <SeatReservation />
+      </Route>
+      <Route path="/reservations/:reservationId/edit">
+        <EditReservation />
       </Route>
       <Route>
         <NotFound />
