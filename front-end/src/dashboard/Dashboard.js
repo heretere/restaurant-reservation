@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from "react";
-import {
-  deleteTableReservation,
-  listReservations,
-  listTables,
-} from "../utils/api";
+import React, {useEffect, useState} from "react";
+import {deleteTableReservation, listReservations, listTables,} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { next, previous, today } from "../utils/date-time";
-import { Link, useHistory } from "react-router-dom";
+import {next, previous, today} from "../utils/date-time";
+import {useHistory} from "react-router-dom";
 import useQuery from "../utils/useQuery";
 import DynamicTable from "../common/DynamicTable";
 import ReservationTable from "../common/ReservationTable";
