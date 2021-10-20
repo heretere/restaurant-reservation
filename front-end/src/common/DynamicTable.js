@@ -3,6 +3,7 @@ import React from "react";
 function DynamicTable({
   headers,
   data,
+  mappers,
   defaultSize = 5,
   emptyDataName = "None",
 }) {
@@ -20,11 +21,15 @@ function DynamicTable({
 
     rows.push(
       <tr key={i}>
-        {headerKeys.map((headerKey, headerIndex) => (
-          <td key={i + "-" + headerIndex}>
-            {row ? row[headerKey] : emptyDataName}
-          </td>
-        ))}
+        {headerKeys.map((headerKey, headerIndex) => {
+          const key = i + "-" + headerIndex;
+
+          if (!row || (row && !mappers[headerKey])) {
+            return <td key={key}>{row ? row[headerKey] : emptyDataName}</td>;
+          } else {
+            return mappers[headerKey](key, row);
+          }
+        })}
       </tr>
     );
   }
