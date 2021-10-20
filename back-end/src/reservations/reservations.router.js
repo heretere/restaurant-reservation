@@ -9,6 +9,8 @@ const controller = require("./reservations.controller");
 
 router.route("/").get(controller.list).post(controller.post);
 
-router.route("/:reservationId([0-9]+)").get(controller.read);
+router.route("/:reservationId/status").put(controller.updateStatus);
+
+router.route("/:reservationId").get(controller.read);
 
 module.exports = router;

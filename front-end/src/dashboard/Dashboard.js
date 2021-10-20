@@ -55,7 +55,10 @@ function Dashboard() {
   }
 
   const finishTable = (table) => {
-    deleteTableReservation(table, null).then(loadTables).catch(setError);
+    deleteTableReservation(table, null)
+      .then(loadTables)
+      .then(loadReservations)
+      .catch(setError);
   };
 
   return (
@@ -75,17 +78,27 @@ function Dashboard() {
               mobile_number: "Mobile Number",
               reservation_time: "Time",
               people: "People",
+              status: "Status",
             }}
             mappers={{
-              seat: (key, { reservation_id }) => {
+              seat: (key, { reservation_id, status }) => {
                 return (
                   <td key={key}>
-                    <Link
-                      className="btn btn-primary"
-                      to={`/reservations/${reservation_id}/seat`}
-                    >
-                      Seat
-                    </Link>
+                    {status === "booked" && (
+                      <Link
+                        className="btn btn-primary"
+                        to={`/reservations/${reservation_id}/seat`}
+                      >
+                        Seat
+                      </Link>
+                    )}
+                  </td>
+                );
+              },
+              status: (key, { reservation_id, status }) => {
+                return (
+                  <td key={key} data-reservation-id-status={reservation_id}>
+                    {status}
                   </td>
                 );
               },

@@ -2,6 +2,8 @@ const service = require("./reservations.service");
 
 // Middleware validation
 
+const validStatuses = ["booked", "seated", "finished"];
+
 const validateReservation = (req, res, next) => {
   const {
     data: {
@@ -11,6 +13,7 @@ const validateReservation = (req, res, next) => {
       reservation_date,
       reservation_time,
       people,
+      status,
     } = {},
   } = req.body;
 
@@ -86,6 +89,13 @@ const validateReservation = (req, res, next) => {
     });
   }
 
+  if (status && status !== "booked") {
+    return next({
+      status: 400,
+      message: `Invalid status: ${status}`,
+    });
+  }
+
   return next();
 };
 
@@ -104,6 +114,26 @@ const reservationExists = (req, res, next) => {
       return next();
     })
     .catch(next);
+};
+
+const validateStatus = (req, res, next) => {
+  const { data: { status } = {} } = req.body;
+
+  if (res.locals.reservation.status === "finished") {
+    return next({
+      status: 400,
+      message: `Cannot update the status of a finished reservation.`,
+    });
+  }
+
+  if (!status || !validStatuses.includes(status)) {
+    return next({
+      status: 400,
+      message: `Invalid status: ${status}.`,
+    });
+  }
+
+  return next();
 };
 
 /**
@@ -132,8 +162,20 @@ const read = (req, res) => {
   res.json({ data: res.locals.reservation });
 };
 
+const updateStatus = (req, res, next) => {
+  service
+    .updateReservationStatus(req.params.reservationId, req.body.data.status)
+    .then((data) => {
+      console.log(data);
+      return data;
+    })
+    .then((data) => res.json({ data }))
+    .catch(next);
+};
+
 module.exports = {
   list: list,
   post: [validateReservation, post],
   read: [reservationExists, read],
+  updateStatus: [reservationExists, validateStatus, updateStatus],
 };
