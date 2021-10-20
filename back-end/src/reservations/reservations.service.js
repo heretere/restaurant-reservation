@@ -32,6 +32,14 @@ const create = (reservation) =>
     .returning("*")
     .then((columns) => columns[0]);
 
+const update = (reservation_id, reservation) => {
+  return knex(TABLE_NAME)
+    .where({ reservation_id })
+    .update(reservation)
+    .returning("*")
+    .then((rows) => rows[0]);
+};
+
 const updateReservationStatus = (reservation_id, status) => {
   return knex(TABLE_NAME)
     .where({ reservation_id })
@@ -43,4 +51,4 @@ const updateReservationStatus = (reservation_id, status) => {
 const read = (reservation_id) =>
   knex(TABLE_NAME).where({ reservation_id }).first();
 
-module.exports = { list, post: create, read, updateReservationStatus };
+module.exports = { list, post: create, read, update, updateReservationStatus };

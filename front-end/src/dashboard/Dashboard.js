@@ -1,8 +1,12 @@
-import React, {useEffect, useState} from "react";
-import {deleteTableReservation, listReservations, listTables,} from "../utils/api";
+import React, { useEffect, useState } from "react";
+import {
+  deleteTableReservation,
+  listReservations,
+  listTables,
+} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import {next, previous, today} from "../utils/date-time";
-import {useHistory} from "react-router-dom";
+import { next, previous, today } from "../utils/date-time";
+import { useHistory } from "react-router-dom";
 import useQuery from "../utils/useQuery";
 import DynamicTable from "../common/DynamicTable";
 import ReservationTable from "../common/ReservationTable";
@@ -67,7 +71,10 @@ function Dashboard() {
           <div className="d-md-flex mb-3">
             <h4 className="mb-0">Reservations for {date}</h4>
           </div>
-          <ReservationTable reservations={reservations} />
+          <ReservationTable
+            reservations={reservations}
+            reloadReservations={loadReservations}
+          />
           <nav>
             <ul className="pagination">
               <li className="page-item">
