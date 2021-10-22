@@ -1,5 +1,6 @@
 const service = require("./tables.service");
 const reservationService = require("../reservations/reservations.service");
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 // Middleware validation
 
@@ -163,14 +164,18 @@ const unAssignReservation = (req, res, next) => {
 };
 
 module.exports = {
-  list: list,
-  post: [validateTable, post],
-  read: [tableExists, read],
+  list: asyncErrorBoundary(list),
+  post: [validateTable, asyncErrorBoundary(post)],
+  read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
   assignReservation: [
     tableExists,
-    validateReservation,
+    asyncErrorBoundary(validateReservation),
     validateTableSeating,
-    assignReservation,
+    asyncErrorBoundary(assignReservation),
   ],
-  deleteReservation: [tableExists, validateTableOccupied, unAssignReservation],
+  deleteReservation: [
+    asyncErrorBoundary(tableExists),
+    validateTableOccupied,
+    asyncErrorBoundary(unAssignReservation),
+  ],
 };
